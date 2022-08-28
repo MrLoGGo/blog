@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ru.spring.blog.dao.UserDAO;
 import ru.spring.blog.models.User;
 
+import java.util.regex.Pattern;
+
 @Controller
 @RequestMapping("/users")
 public class UsersController {
@@ -36,7 +38,10 @@ public class UsersController {
 
     @PostMapping()
     public String create(@ModelAttribute("user")User user){
-        userDAO.save(user);
+        Pattern password_check = Pattern.compile("\\w{8,20}");
+        if(password_check.matcher(user.getPassword()).find()){
+            userDAO.save(user);
+        }
         return "redirect:/users";
     }
 }
