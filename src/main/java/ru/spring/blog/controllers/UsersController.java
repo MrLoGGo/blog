@@ -38,8 +38,10 @@ public class UsersController {
 
     @PostMapping()
     public String create(@ModelAttribute("user")User user){
-        Pattern password_check = Pattern.compile("\\w{8,20}");
-        if(password_check.matcher(user.getPassword()).find()){
+        Pattern passwordCheck = Pattern.compile("\\w\\S{8,30}");
+        Pattern LoginCheck = Pattern.compile("\\w\\S{4,30}");
+        Pattern emailCheck = Pattern.compile("^[a-zA-Z0-9+_.-]+@(.+)$");
+        if(passwordCheck.matcher(user.getPassword()).find() && LoginCheck.matcher(user.getLogin()).find() && emailCheck.matcher(user.getEmail()).find()){
             userDAO.save(user);
         }
         return "redirect:/users";

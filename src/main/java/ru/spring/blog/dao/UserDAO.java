@@ -55,13 +55,19 @@ public class UserDAO {
         return users;
     }
     public void save(User user){
+        List<User> nullList = new ArrayList<>();
         try {
             Statement statement = connection.createStatement();
             String SQL = "insert into users(login, email, password) values('" + user.getLogin() +
                     "',"+"'" + user.getEmail() + "'," +"'" + user.getPassword()+"');" ;
-            statement.executeUpdate(SQL);
+            ResultSet resultSet = statement.executeQuery("select count(*) from users where login = '" + user.getLogin() + "'");
+            resultSet.next();
+            if(resultSet.getInt(1) == 0){
+                statement.executeUpdate(SQL);
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
     }
 }
